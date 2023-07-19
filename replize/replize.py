@@ -12,8 +12,8 @@ def decode_and_print(x):
 def replize(
     command: str,
     *,
-    prompt_template: str = "{command} >>> ",
-    exit_commands: Iterable[str] = ("exit", "quit"),
+    prompt_template: str = '{command} >>> ',
+    exit_commands: Iterable[str] = ('exit', 'quit'),
     exit_exceptions: Iterable[Exception] = (EOFError, KeyboardInterrupt),
     stdout_callback=decode_and_print,
     stderr_callback=decode_and_print,
@@ -63,12 +63,8 @@ def replize(
                 first_word, *_ = arguments_str.split()
                 if first_word in exit_commands:
                     break  # TODO: Enable verbose exit?
-                full_command = f"{command} {arguments_str}"
-                process = Popen(
-                    shlex_split(full_command),
-                    stdout=PIPE,
-                    stderr=PIPE,
-                )
+                full_command = f'{command} {arguments_str}'
+                process = Popen(shlex_split(full_command), stdout=PIPE, stderr=PIPE,)
                 stdout, stderr = process.communicate()
 
                 if stdout:
@@ -88,19 +84,19 @@ def _replize_cli():
         description=replize.__doc__, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("command", help="The command to run.")
+    parser.add_argument('command', help='The command to run.')
     # Give access to prompt_template
     parser.add_argument(
-        "--prompt-template",
-        default="{command} >>> ",
-        help="The template for the prompt.",
+        '--prompt-template',
+        default='{command} >>> ',
+        help='The template for the prompt.',
     )
     # Give access to exit_commands
     parser.add_argument(
-        "--exit-commands",
-        nargs="+",
-        default=("exit", "quit"),
-        help="The commands that will exit the REPL.",
+        '--exit-commands',
+        nargs='+',
+        default=('exit', 'quit'),
+        help='The commands that will exit the REPL.',
     )
     args = parser.parse_args()
 
