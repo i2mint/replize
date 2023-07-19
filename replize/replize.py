@@ -42,11 +42,11 @@ def replize(
 
     Tricks:
 
-    `replize` is meant to be used with `functools.partial` to make the kind of REPL 
-    factory YOU want, by changing the defaults. 
+    `replize` is meant to be used with `functools.partial` to make the kind of REPL
+    factory YOU want, by changing the defaults.
 
-    If you want a given stdout or stderr value to have the effect of exiting the REPL, 
-    you can set the callback to raise an exception that is in the ``exit_exceptions``. 
+    If you want a given stdout or stderr value to have the effect of exiting the REPL,
+    you can set the callback to raise an exception that is in the ``exit_exceptions``.
 
     """
 
@@ -79,8 +79,8 @@ def replize(
             break  # TODO: Enable verbose exit?
 
 
-if __name__ == "__main__":
-    # Script to enter a REPL for a command line program given by name
+def _replize_cli():
+    """Script to enter a REPL for a command line program given by name"""
     from argparse import ArgumentParser, RawTextHelpFormatter
 
     # TODO: Would like to use replize.__doc__ here, but doesn't format well.
@@ -110,5 +110,6 @@ if __name__ == "__main__":
         exit_commands=args.exit_commands,
     )
 
-    # TODO: Could easily give control to prompt_template and exit_commands, 
-    # and possibly, as well (through strings), to exit_exceptions.
+
+if __name__ == "__main__":
+    _replize_cli()
