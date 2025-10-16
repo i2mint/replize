@@ -1,6 +1,6 @@
 """REPLize a command line program."""
 
-from typing import Iterable
+from collections.abc import Iterable
 from subprocess import Popen, PIPE
 from shlex import split as shlex_split
 
