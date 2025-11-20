@@ -1,0 +1,28 @@
+# Example replize configuration file
+# Place this at ~/.replize.toml or ~/.config/replize/config.toml
+
+[defaults]
+# Default settings for all commands
+use_rich = true
+use_prompt_toolkit = true
+enable_history = true
+history_file = "~/.replize_history"
+show_return_code = false
+validate_command = true
+verbose_exit = false
+
+[commands.git]
+# Custom settings for git command
+prompt_template = "git 🌿 >>> "
+exit_commands = ["exit", "quit", "q"]
+
+[commands.docker]
+# Custom settings for docker command
+prompt_template = "🐳 {command} >>> "
+show_return_code = true
+timeout = 30.0
+
+[commands.kubectl]
+# Custom settings for kubectl command
+prompt_template = "☸️  {command} >>> "
+show_return_code = true
