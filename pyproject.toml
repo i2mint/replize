@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "replize"
-version = "0.1.5"
+version = "0.1.6"
 description = "Tools to create REPL interfaces"
 readme = "README.md"
 requires-python = ">=3.10"
