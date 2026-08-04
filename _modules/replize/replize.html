@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>replize.replize &mdash; replize 0.1.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            replize
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/replize.html">replize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/replize/replize.html">replize.replize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">replize</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">replize.replize</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for replize.replize</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;REPLize a command line program.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shlex</span><span class="w"> </span><span class="kn">import</span> <span class="n">split</span> <span class="k">as</span> <span class="n">shlex_split</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">decode_and_print</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="replize">
+<a class="viewcode-back" href="../../module_docs/replize/replize.html#replize.replize.replize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">replize</span><span class="p">(</span>
+    <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">prompt_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{command}</span><span class="s1"> &gt;&gt;&gt; &#39;</span><span class="p">,</span>
+    <span class="n">exit_commands</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>
+    <span class="n">exit_exceptions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="ne">EOFError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">),</span>
+    <span class="n">stdout_callback</span><span class="o">=</span><span class="n">decode_and_print</span><span class="p">,</span>
+    <span class="n">stderr_callback</span><span class="o">=</span><span class="n">decode_and_print</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a command line into a REPL.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">    .. code-block:: bash</span>
+
+<span class="sd">        $ replize &lt;command&gt;</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: bash</span>
+
+<span class="sd">        $ replize ls</span>
+<span class="sd">        ls &gt;&gt;&gt; -l</span>
+<span class="sd">        total 8</span>
+<span class="sd">        -rw-r--r-- 1 user group  0 Jan  1 00:00 __init__.py</span>
+<span class="sd">        -rw-r--r-- 1 user group  0 Jan  1 00:00 __main__.py</span>
+<span class="sd">        -rw-r--r-- 1 user group  0 Jan  1 00:00 __pycache__</span>
+<span class="sd">        -rw-r--r-- 1 user group  0 Jan  1 00:00 replize.py</span>
+<span class="sd">        ls &gt;&gt;&gt; exit</span>
+<span class="sd">        $</span>
+
+<span class="sd">    Tricks:</span>
+
+<span class="sd">    `replize` is meant to be used with `functools.partial` to make the kind of REPL</span>
+<span class="sd">    factory YOU want, by changing the defaults.</span>
+
+<span class="sd">    If you want a given stdout or stderr value to have the effect of exiting the REPL,</span>
+<span class="sd">    you can set the callback to raise an exception that is in the ``exit_exceptions``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">exit_commands</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exit_commands</span><span class="p">)</span>
+    <span class="n">exit_exceptions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">exit_exceptions</span><span class="p">)</span>
+
+    <span class="c1"># TODO: Like this for now, but could make prompt string dynamic in the future</span>
+    <span class="n">prompt_str</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">arguments_str</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">prompt_str</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">arguments_str</span><span class="p">:</span>
+                <span class="n">first_word</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">arguments_str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">first_word</span> <span class="ow">in</span> <span class="n">exit_commands</span><span class="p">:</span>
+                    <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span>
+                <span class="n">full_command</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">arguments_str</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">process</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">shlex_split</span><span class="p">(</span><span class="n">full_command</span><span class="p">),</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,)</span>
+                <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">stdout</span><span class="p">:</span>
+                    <span class="n">stdout_callback</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">stderr</span><span class="p">:</span>
+                    <span class="n">stderr_callback</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">exit_exceptions</span><span class="p">:</span>  <span class="c1"># TODO: Pylance says this is an error. It&#39;s not.</span>
+            <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_replize_cli</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Script to enter a REPL for a command line program given by name&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">RawTextHelpFormatter</span>
+
+    <span class="c1"># TODO: Would like to use replize.__doc__ here, but doesn&#39;t format well.</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">replize</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The command to run.&#39;</span><span class="p">)</span>
+    <span class="c1"># Give access to prompt_template</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--prompt-template&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{command}</span><span class="s1"> &gt;&gt;&gt; &#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The template for the prompt.&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Give access to exit_commands</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--exit-commands&#39;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The commands that will exit the REPL.&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">replize</span><span class="p">(</span>
+        <span class="n">command</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">command</span><span class="p">,</span>
+        <span class="n">prompt_template</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span>
+        <span class="n">exit_commands</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">exit_commands</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_replize_cli</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
