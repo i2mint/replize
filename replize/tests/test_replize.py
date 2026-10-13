@@ -6,9 +6,11 @@ the running Python interpreter, so no external program is assumed.
 """
 
 import importlib
+import os
 import shlex
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -235,14 +237,23 @@ def test_console_script_target_exists():
     assert callable(getattr(replize_module, "_replize_cli"))
 
 
-def test_cli_end_to_end_in_a_real_process():
-    """``python -m replize.replize`` run for real: piped stdin, EOF ends the session."""
+def test_cli_end_to_end_in_a_real_process(tmp_path):
+    """``python -m replize.replize`` run for real: piped stdin, EOF ends the session.
+
+    Run from an empty directory with the package's parent on ``PYTHONPATH``, so the
+    result does not depend on the caller's working directory (from inside ``replize/``,
+    ``replize.py`` would shadow the package).
+    """
+    package_parent = Path(replize_module.__file__).resolve().parent.parent
+    env = {**os.environ, "PYTHONPATH": str(package_parent)}
     result = subprocess.run(
         [sys.executable, "-m", "replize.replize", PY_C, "--prompt-template", "P> "],
         input="\"print('e2e')\"\n",
         capture_output=True,
         text=True,
         timeout=60,
+        cwd=tmp_path,
+        env=env,
     )
     assert result.returncode == 0
     assert "e2e" in result.stdout
