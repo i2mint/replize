@@ -1,0 +1,20 @@
+# replize
+
+> Tools to create REPL interfaces
+
+
+## Pages
+
+- [replize](index.html.md): Tools to create REPL interfaces.
+- [API reference](api.html.md): | &#96;replize&#96;   | Tools for make REPL interfaces.   |
+- [replize](_autosummary/replize.html.md): Tools for make REPL interfaces.
+- [replize.replize](_autosummary/replize.replize.html.md): Converts a command line into a REPL.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-13 16:24 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
+
+## Optional
+
+- [replize.md](replize.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

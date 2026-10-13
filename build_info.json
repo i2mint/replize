@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-10-13T16:24:17Z",
+  "package": {
+    "name": "replize",
+    "version": "0.1.6",
+    "display_name": "replize",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "60156c7e7ebba4df26fa5741471042058afea671",
+    "short_commit": "60156c7",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/i2mint/replize",
+    "commit_url": "https://github.com/i2mint/replize/commit/60156c7e7ebba4df26fa5741471042058afea671",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "i2mint/replize",
+    "sha": "60156c7e7ebba4df26fa5741471042058afea671",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "38430035820",
+    "run_url": "https://github.com/i2mint/replize/actions/runs/38430035820",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.17",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.15"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "shibuya",
+    "accent": "#536000",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 2,
+    "objects_documented": 1
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.1.6",
+    "relation": "same",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/i2mint/replize && cd replize\ngit checkout 60156c7e7ebba4df26fa5741471042058afea671\npip install \"epythet==0.2.17\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}

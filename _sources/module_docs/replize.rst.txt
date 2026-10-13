@@ -1,4 +1,0 @@
-replize
-=======
-.. automodule:: replize
-   :members:

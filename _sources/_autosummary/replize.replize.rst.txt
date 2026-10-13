@@ -1,0 +1,6 @@
+replize.replize
+===============
+
+.. currentmodule:: replize
+
+.. autofunction:: replize
