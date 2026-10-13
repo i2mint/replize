@@ -102,9 +102,17 @@ def test_exit_command_is_the_first_word_only(monkeypatch):
 
 
 def test_exit_word_later_in_a_line_is_an_argument(monkeypatch):
-    script_input(monkeypatch, ["\"print('exit')\"", "exit"])
+    """Only the first word is checked: a later ``exit`` is passed on to the command."""
+    script_input(monkeypatch, ['"import sys; print(sys.argv[1])" exit', "exit"])
     out, _ = run()
     assert [o.decode().strip() for o in out] == ["exit"]
+
+
+@pytest.mark.parametrize("word", ["exiting", "quitter", "exitx"])
+def test_exit_commands_match_whole_words_not_prefixes(monkeypatch, word):
+    prompts = script_input(monkeypatch, [f'"print(1)" {word}', f"{word}", "exit"])
+    run()
+    assert len(prompts) == 3  # neither line ended the loop; only ``exit`` did
 
 
 def test_custom_exit_commands_replace_the_defaults(monkeypatch):
@@ -151,6 +159,12 @@ def test_prompt_is_rendered_from_the_template(monkeypatch):
     prompts = script_input(monkeypatch, ["exit"])
     run("some-tool", prompt_template="[{command}]$ ")
     assert prompts == ["[some-tool]$ "]
+
+
+def test_prompt_template_is_used_verbatim(monkeypatch):
+    prompts = script_input(monkeypatch, ["exit"])
+    run("ls", prompt_template="{command}>")
+    assert prompts == ["ls>"]
 
 
 def test_default_prompt(monkeypatch):
