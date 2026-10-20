@@ -9,7 +9,7 @@
 - [API reference](api.html.md): | &#96;replize&#96;   | Tools for make REPL interfaces.   |
 - [replize](_autosummary/replize.html.md): Tools for make REPL interfaces.
 - [replize.replize](_autosummary/replize.replize.html.md): Converts a command line into a REPL.
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-13 16:24 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 10:16 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
 
 ## Optional
 

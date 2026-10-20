@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d88b86f9" />
     <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -164,72 +165,81 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="48"><span class="sd">    If you want a given stdout or stderr value to have the effect of exiting the REPL,</span>
 </span><span data-line="49"><span class="sd">    you can set the callback to raise an exception that is in the ``exit_exceptions``.</span>
 </span><span data-line="50">
-</span><span data-line="51"><span class="sd">    """</span>
-</span><span data-line="52">
-</span><span data-line="53">    <span class="n">exit_commands</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exit_commands</span><span class="p">)</span>
-</span><span data-line="54">    <span class="n">exit_exceptions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">exit_exceptions</span><span class="p">)</span>
+</span><span data-line="51"><span class="sd">    A command that can't be run at all (``FileNotFoundError``, ``PermissionError``...)</span>
+</span><span data-line="52"><span class="sd">    doesn't end the session: the error is passed, encoded, to ``stderr_callback``.</span>
+</span><span data-line="53">
+</span><span data-line="54"><span class="sd">    """</span>
 </span><span data-line="55">
-</span><span data-line="56">    <span class="c1"># TODO: Like this for now, but could make prompt string dynamic in the future</span>
-</span><span data-line="57">    <span class="n">prompt_str</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">)</span>
+</span><span data-line="56">    <span class="n">exit_commands</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exit_commands</span><span class="p">)</span>
+</span><span data-line="57">    <span class="n">exit_exceptions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">exit_exceptions</span><span class="p">)</span>
 </span><span data-line="58">
-</span><span data-line="59">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-</span><span data-line="60">        <span class="k">try</span><span class="p">:</span>
-</span><span data-line="61">            <span class="n">arguments_str</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">prompt_str</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-</span><span data-line="62">            <span class="k">if</span> <span class="n">arguments_str</span><span class="p">:</span>
-</span><span data-line="63">                <span class="n">first_word</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">arguments_str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-</span><span data-line="64">                <span class="k">if</span> <span class="n">first_word</span> <span class="ow">in</span> <span class="n">exit_commands</span><span class="p">:</span>
-</span><span data-line="65">                    <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span>
-</span><span data-line="66">                <span class="n">full_command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arguments_str</span><span class="si">}</span><span class="s2">"</span>
-</span><span data-line="67">                <span class="n">process</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span>
-</span><span data-line="68">                    <span class="n">shlex_split</span><span class="p">(</span><span class="n">full_command</span><span class="p">),</span>
-</span><span data-line="69">                    <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span>
-</span><span data-line="70">                    <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span>
-</span><span data-line="71">                <span class="p">)</span>
-</span><span data-line="72">                <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
-</span><span data-line="73">
-</span><span data-line="74">                <span class="k">if</span> <span class="n">stdout</span><span class="p">:</span>
-</span><span data-line="75">                    <span class="n">stdout_callback</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
-</span><span data-line="76">                <span class="k">if</span> <span class="n">stderr</span><span class="p">:</span>
-</span><span data-line="77">                    <span class="n">stderr_callback</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
-</span><span data-line="78">        <span class="k">except</span> <span class="n">exit_exceptions</span><span class="p">:</span>  <span class="c1"># TODO: Pylance says this is an error. It's not.</span>
-</span><span data-line="79">            <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span></div>
+</span><span data-line="59">    <span class="c1"># TODO: Like this for now, but could make prompt string dynamic in the future</span>
+</span><span data-line="60">    <span class="n">prompt_str</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">)</span>
+</span><span data-line="61">
+</span><span data-line="62">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="63">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="64">            <span class="n">arguments_str</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">prompt_str</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span data-line="65">            <span class="k">if</span> <span class="n">arguments_str</span><span class="p">:</span>
+</span><span data-line="66">                <span class="n">first_word</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">arguments_str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</span><span data-line="67">                <span class="k">if</span> <span class="n">first_word</span> <span class="ow">in</span> <span class="n">exit_commands</span><span class="p">:</span>
+</span><span data-line="68">                    <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span>
+</span><span data-line="69">                <span class="n">full_command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arguments_str</span><span class="si">}</span><span class="s2">"</span>
+</span><span data-line="70">                <span class="n">argv</span> <span class="o">=</span> <span class="n">shlex_split</span><span class="p">(</span><span class="n">full_command</span><span class="p">)</span>
+</span><span data-line="71">                <span class="k">try</span><span class="p">:</span>
+</span><span data-line="72">                    <span class="n">process</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span>
+</span><span data-line="73">                        <span class="n">argv</span><span class="p">,</span>
+</span><span data-line="74">                        <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span>
+</span><span data-line="75">                        <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span>
+</span><span data-line="76">                    <span class="p">)</span>
+</span><span data-line="77">                <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># not installed, not executable...</span>
+</span><span data-line="78">                    <span class="c1"># A REPL reports and re-prompts: it doesn't end the session.</span>
+</span><span data-line="79">                    <span class="n">stderr_callback</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</span><span data-line="80">                    <span class="k">continue</span>
+</span><span data-line="81">                <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+</span><span data-line="82">
+</span><span data-line="83">                <span class="k">if</span> <span class="n">stdout</span><span class="p">:</span>
+</span><span data-line="84">                    <span class="n">stdout_callback</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+</span><span data-line="85">                <span class="k">if</span> <span class="n">stderr</span><span class="p">:</span>
+</span><span data-line="86">                    <span class="n">stderr_callback</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+</span><span data-line="87">        <span class="k">except</span> <span class="n">exit_exceptions</span><span class="p">:</span>  <span class="c1"># TODO: Pylance says this is an error. It's not.</span>
+</span><span data-line="88">            <span class="k">break</span>  <span class="c1"># TODO: Enable verbose exit?</span></div>
 
-</span><span data-line="80">
-</span><span data-line="81">
-</span><span data-line="82"><span class="k">def</span><span class="w"> </span><span class="nf">_replize_cli</span><span class="p">():</span>
-</span><span data-line="83"><span class="w">    </span><span class="sd">"""Script to enter a REPL for a command line program given by name"""</span>
-</span><span data-line="84">    <span class="kn">from</span><span class="w"> </span><span class="nn">argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">RawTextHelpFormatter</span>
-</span><span data-line="85">
-</span><span data-line="86">    <span class="c1"># TODO: Would like to use replize.__doc__ here, but doesn't format well.</span>
-</span><span data-line="87">    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span>
-</span><span data-line="88">        <span class="n">description</span><span class="o">=</span><span class="n">replize</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span>
-</span><span data-line="89">    <span class="p">)</span>
+</span><span data-line="89">
 </span><span data-line="90">
-</span><span data-line="91">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"command"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"The command to run."</span><span class="p">)</span>
-</span><span data-line="92">    <span class="c1"># Give access to prompt_template</span>
-</span><span data-line="93">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span data-line="94">        <span class="s2">"--prompt-template"</span><span class="p">,</span>
-</span><span data-line="95">        <span class="n">default</span><span class="o">=</span><span class="s2">"</span><span class="si">{command}</span><span class="s2"> &gt;&gt;&gt; "</span><span class="p">,</span>
-</span><span data-line="96">        <span class="n">help</span><span class="o">=</span><span class="s2">"The template for the prompt."</span><span class="p">,</span>
-</span><span data-line="97">    <span class="p">)</span>
-</span><span data-line="98">    <span class="c1"># Give access to exit_commands</span>
-</span><span data-line="99">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span data-line="100">        <span class="s2">"--exit-commands"</span><span class="p">,</span>
-</span><span data-line="101">        <span class="n">nargs</span><span class="o">=</span><span class="s2">"+"</span><span class="p">,</span>
-</span><span data-line="102">        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="s2">"exit"</span><span class="p">,</span> <span class="s2">"quit"</span><span class="p">),</span>
-</span><span data-line="103">        <span class="n">help</span><span class="o">=</span><span class="s2">"The commands that will exit the REPL."</span><span class="p">,</span>
-</span><span data-line="104">    <span class="p">)</span>
-</span><span data-line="105">    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-</span><span data-line="106">
-</span><span data-line="107">    <span class="n">replize</span><span class="p">(</span>
-</span><span data-line="108">        <span class="n">command</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">command</span><span class="p">,</span>
-</span><span data-line="109">        <span class="n">prompt_template</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span>
-</span><span data-line="110">        <span class="n">exit_commands</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">exit_commands</span><span class="p">,</span>
-</span><span data-line="111">    <span class="p">)</span>
-</span><span data-line="112">
-</span><span data-line="113">
-</span><span data-line="114"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-</span><span data-line="115">    <span class="n">_replize_cli</span><span class="p">()</span>
+</span><span data-line="91"><span class="k">def</span><span class="w"> </span><span class="nf">_replize_cli</span><span class="p">():</span>
+</span><span data-line="92"><span class="w">    </span><span class="sd">"""Script to enter a REPL for a command line program given by name"""</span>
+</span><span data-line="93">    <span class="kn">from</span><span class="w"> </span><span class="nn">argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">RawTextHelpFormatter</span>
+</span><span data-line="94">
+</span><span data-line="95">    <span class="c1"># TODO: Would like to use replize.__doc__ here, but doesn't format well.</span>
+</span><span data-line="96">    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span>
+</span><span data-line="97">        <span class="n">description</span><span class="o">=</span><span class="n">replize</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">RawTextHelpFormatter</span>
+</span><span data-line="98">    <span class="p">)</span>
+</span><span data-line="99">
+</span><span data-line="100">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"command"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"The command to run."</span><span class="p">)</span>
+</span><span data-line="101">    <span class="c1"># Give access to prompt_template</span>
+</span><span data-line="102">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+</span><span data-line="103">        <span class="s2">"--prompt-template"</span><span class="p">,</span>
+</span><span data-line="104">        <span class="n">default</span><span class="o">=</span><span class="s2">"</span><span class="si">{command}</span><span class="s2"> &gt;&gt;&gt; "</span><span class="p">,</span>
+</span><span data-line="105">        <span class="n">help</span><span class="o">=</span><span class="s2">"The template for the prompt."</span><span class="p">,</span>
+</span><span data-line="106">    <span class="p">)</span>
+</span><span data-line="107">    <span class="c1"># Give access to exit_commands</span>
+</span><span data-line="108">    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+</span><span data-line="109">        <span class="s2">"--exit-commands"</span><span class="p">,</span>
+</span><span data-line="110">        <span class="n">nargs</span><span class="o">=</span><span class="s2">"+"</span><span class="p">,</span>
+</span><span data-line="111">        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="s2">"exit"</span><span class="p">,</span> <span class="s2">"quit"</span><span class="p">),</span>
+</span><span data-line="112">        <span class="n">help</span><span class="o">=</span><span class="s2">"The commands that will exit the REPL."</span><span class="p">,</span>
+</span><span data-line="113">    <span class="p">)</span>
+</span><span data-line="114">    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span><span data-line="115">
+</span><span data-line="116">    <span class="n">replize</span><span class="p">(</span>
+</span><span data-line="117">        <span class="n">command</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">command</span><span class="p">,</span>
+</span><span data-line="118">        <span class="n">prompt_template</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span>
+</span><span data-line="119">        <span class="n">exit_commands</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">exit_commands</span><span class="p">,</span>
+</span><span data-line="120">    <span class="p">)</span>
+</span><span data-line="121">
+</span><span data-line="122">
+</span><span data-line="123"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+</span><span data-line="124">    <span class="n">_replize_cli</span><span class="p">()</span>
 </span></pre></div>
         </article><button class="back-to-top" type="button">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -257,7 +267,7 @@ data-aria-dark="Switch to auto color mode">
     </div>
   </div>
 </footer>
-      <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
+      <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

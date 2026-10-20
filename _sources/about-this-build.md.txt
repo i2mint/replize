@@ -5,17 +5,19 @@ orphan: true
 
 # About this build
 
-This documentation was built on **2026-10-13 16:24 UTC** from commit <a href="https://github.com/i2mint/replize/commit/60156c7e7ebba4df26fa5741471042058afea671"><code>60156c7</code></a> on branch <code>master</code>, for **replize 0.1.6** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 10:16 UTC** from commit <a href="https://github.com/i2mint/replize/commit/0c581bd617fe052107db6c6e74d0421afc4a151e"><code>0c581bd</code></a> on branch <code>master</code>, for **replize 0.1.7** (from <code>pyproject.toml</code>).
 
-:::{note}
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+:::{warning}
+The documentation and the package may be misaligned:
+
+- The documented version (0.1.7) is behind the latest release on PyPI (0.1.8): `pip install replize` gives newer code than these docs describe.
 :::
 
 ## Source
 
 | | |
 |---|---|
-| Commit | <a href="https://github.com/i2mint/replize/commit/60156c7e7ebba4df26fa5741471042058afea671"><code>60156c7e7ebba4df26fa5741471042058afea671</code></a> |
+| Commit | <a href="https://github.com/i2mint/replize/commit/0c581bd617fe052107db6c6e74d0421afc4a151e"><code>0c581bd617fe052107db6c6e74d0421afc4a151e</code></a> |
 | Branch | <code>master</code> |
 | Tags at this commit | none |
 | Working tree | clean |
@@ -26,16 +28,16 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 | | |
 |---|---|
 | Repository | <code>i2mint/replize</code> |
-| Run | <a href="https://github.com/i2mint/replize/actions/runs/38430035820">38430035820</a> |
+| Run | <a href="https://github.com/i2mint/replize/actions/runs/39406599685">39406599685</a> |
 | Ref | <code>refs/heads/master</code> |
-| Event commit | <code>60156c7e7ebba4df26fa5741471042058afea671</code> (in the history of the built commit) |
+| Event commit | <code>0c581bd617fe052107db6c6e74d0421afc4a151e</code> (in the history of the built commit) |
 
 ## Tools
 
 | | |
 |---|---|
-| epythet | 0.2.17 |
-| Sphinx | 9.1.0 |
+| epythet | 0.2.18 |
+| Sphinx | 9.1.1 |
 | docutils | 0.22.4 |
 | Python | 3.12.15 |
 
@@ -53,14 +55,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/replize/0.1.6/">0.1.6</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/replize/0.1.8/">0.1.8</a>, newer than the documented version (0.1.7).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/i2mint/replize && cd replize
-git checkout 60156c7e7ebba4df26fa5741471042058afea671
-pip install "epythet==0.2.17"
+git checkout 0c581bd617fe052107db6c6e74d0421afc4a151e
+pip install "epythet==0.2.18"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

@@ -31,3 +31,6 @@ factory YOU want, by changing the defaults.
 
 If you want a given stdout or stderr value to have the effect of exiting the REPL,
 you can set the callback to raise an exception that is in the `exit_exceptions`.
+
+A command that can’t be run at all (`FileNotFoundError`, `PermissionError`…)
+doesn’t end the session: the error is passed, encoded, to `stderr_callback`.
