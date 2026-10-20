@@ -67,15 +67,16 @@ def replize(
                 if first_word in exit_commands:
                     break  # TODO: Enable verbose exit?
                 full_command = f"{command} {arguments_str}"
+                argv = shlex_split(full_command)
                 try:
                     process = Popen(
-                        shlex_split(full_command),
+                        argv,
                         stdout=PIPE,
                         stderr=PIPE,
                     )
                 except OSError as error:  # not installed, not executable...
                     # A REPL reports and re-prompts: it doesn't end the session.
-                    stderr_callback(f"{error}\n".encode())
+                    stderr_callback(f"{argv[0]}: {error}\n".encode())
                     continue
                 stdout, stderr = process.communicate()
 
