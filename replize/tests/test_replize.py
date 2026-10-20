@@ -272,3 +272,11 @@ def test_cli_end_to_end_in_a_real_process(tmp_path):
     assert result.returncode == 0
     assert "e2e" in result.stdout
     assert "P> " in result.stdout
+
+
+def test_a_command_that_cannot_be_run_is_reported_and_the_repl_goes_on(monkeypatch):
+    prompts = script_input(monkeypatch, ["x", "exit"])
+    out, err = run("/nonexistent/no_such_program")
+    assert out == []
+    assert len(err) == 1 and b"no_such_program" in err[0]
+    assert len(prompts) == 2  # it prompted again after the failure
