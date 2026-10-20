@@ -48,6 +48,9 @@ def replize(
     If you want a given stdout or stderr value to have the effect of exiting the REPL,
     you can set the callback to raise an exception that is in the ``exit_exceptions``.
 
+    A command that can't be run at all (``FileNotFoundError``, ``PermissionError``...)
+    doesn't end the session: the error is passed, encoded, to ``stderr_callback``.
+
     """
 
     exit_commands = set(exit_commands)
@@ -64,11 +67,16 @@ def replize(
                 if first_word in exit_commands:
                     break  # TODO: Enable verbose exit?
                 full_command = f"{command} {arguments_str}"
-                process = Popen(
-                    shlex_split(full_command),
-                    stdout=PIPE,
-                    stderr=PIPE,
-                )
+                try:
+                    process = Popen(
+                        shlex_split(full_command),
+                        stdout=PIPE,
+                        stderr=PIPE,
+                    )
+                except OSError as error:  # not installed, not executable...
+                    # A REPL reports and re-prompts: it doesn't end the session.
+                    stderr_callback(f"{error}\n".encode())
+                    continue
                 stdout, stderr = process.communicate()
 
                 if stdout:
